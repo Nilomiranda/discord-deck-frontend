@@ -1,10 +1,15 @@
 import axios from 'axios'
 import { QueryClient } from 'react-query'
 import Router from 'next/router'
+import cookies from 'js-cookie'
 
 export const discordClient = axios.create({
   baseURL: process.env.DISCORD_API_URL,
   withCredentials: true,
+})
+
+export const httpClient = axios.create({
+  baseURL: process.env.API_URL
 })
 
 const getQueryParams = (params: Record<string, string | number | boolean> | null) => {
@@ -23,14 +28,23 @@ const getQueryParams = (params: Record<string, string | number | boolean> | null
 }
 
 const defaultQueryFunction = async ({ queryKey }) => {
+  const discordAccessToken = cookies.get('DISCORD_ACCESS_TOKEN')
+
   const baseEndpoint = typeof queryKey === 'object' ? queryKey[0] : queryKey
 
   const queryParams: string = getQueryParams(typeof queryKey === 'object' ? queryKey[1] : null)
 
+  console.log('discordAccessToken', discordAccessToken)
+
   try {
-    const { data } = await discordClient.get(`${baseEndpoint}${queryParams || ''}`)
+    const { data } = await discordClient.get(`${baseEndpoint}${queryParams || ''}`, {
+      headers: {
+        Authorization: discordAccessToken ? `Bearer ${discordAccessToken}` : ''
+      }
+    })
     return data
   } catch (err) {
+    console.error('session error', err)
     if (err?.response?.status === 401 && !Router.pathname.includes('login') && !Router.pathname.includes('sign-up')) {
       await Router.push('/login')
     }
