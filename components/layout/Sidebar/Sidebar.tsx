@@ -1,10 +1,9 @@
 import { Grid, GridItem } from '@chakra-ui/react'
 import SidebarButtons from './SidebarButtons'
-import SidebarUser from "./SidebarUser";
+import SidebarUser from './SidebarUser'
 
-const Sidebar = ({ children }) => {
-  return (
-    <Grid h="100vh" templateRows="repeat(2, 1fr)" templateColumns="repeat(5, 1fr)" gap={4} bg="gray.900">
+const Sidebar = ({ children }) => (
+    <Grid h="100vh" templateRows="repeat(2, 1fr)" templateColumns="repeat(5, 320px)" gap={4} bg="gray.900">
       <GridItem rowSpan={2} colSpan={1} bg="gray.800">
         <SidebarUser />
         <SidebarButtons />
@@ -14,6 +13,5 @@ const Sidebar = ({ children }) => {
       </GridItem>
     </Grid>
   )
-}
 
 export default Sidebar
