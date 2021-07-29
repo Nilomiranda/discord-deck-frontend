@@ -7,7 +7,6 @@ import ServerButton from "../../ServerButton";
 import GuildChannelsList from "../GuildChannelsList";
 
 const SidebarButtons = () => {
-  const loadedServers = useQuery('users/@me/guilds')
   const [guilds, setGuilds] = useState<DiscordGuild[]>([])
   const [isViewingChannels, setIsViewingChannels] = useState(false)
   const [currentViewingGuild, setCurrentViewingGuild] = useState<DiscordGuild>(null)
@@ -16,13 +15,6 @@ const SidebarButtons = () => {
     setCurrentViewingGuild(guild)
     setIsViewingChannels(true)
   }
-
-  useEffect(() => {
-    console.log('servers', loadedServers)
-    if (loadedServers?.data) {
-      setGuilds(loadedServers?.data as DiscordGuild[])
-    }
-  }, [loadedServers])
 
   return (
     <>

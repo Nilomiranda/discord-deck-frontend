@@ -1,84 +1,50 @@
-import {Box, Button, LinkBox, LinkOverlay, useToast} from "@chakra-ui/react";
+import {Box, Button, useToast} from "@chakra-ui/react";
 import {useRouter} from "next/router";
-import {useCallback, useEffect, useState} from "react";
-import cookies from 'js-cookie'
-import {DiscordBearerTokenResponse, fetchDiscordAccessToken, fetchDiscordOauthUrl} from "../services/auth";
+import {useState} from "react";
 import {TOAST_DEFAULT_DURATION} from "../config/constants";
+import Input from "../components/form/Input";
+import {login} from "../services/auth";
 
 const LoginPage = () => {
   const toast = useToast()
   const router = useRouter()
-  const [discordOauthUrl, setDiscordOauthUrl] = useState('')
   const [isAuthenticating, setIsAuthenticating] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const getDiscordOauthUrl = useCallback(async () => {
-    try {
-      const response = await fetchDiscordOauthUrl('http://localhost:4000/login')
-      setDiscordOauthUrl(response?.data?.url)
-    } catch (err) {
-      console.error('Error getting discord oauth url')
-      toast({
-        description: "Error getting Discord's url",
-        status: "error",
-        duration: TOAST_DEFAULT_DURATION,
-        isClosable: true,
-      })
-    }
-  }, [])
-
-  const handleDiscordAuthentication = (data: DiscordBearerTokenResponse) => {
-    if (!data) {
-      return
-    }
-
-    cookies.set('DISCORD_ACCESS_TOKEN', data?.accessToken)
-
-    setTimeout(() => {
-      router.push('/app/dashboard')
-    }, 1000)
-  }
-
-  const getDiscordAccessToken = useCallback(async (code: string) => {
+  const handleLoginSubmit = async (event: Event) => {
+    event?.preventDefault()
     setIsAuthenticating(true)
 
     try {
-      const response = await fetchDiscordAccessToken(code, 'http://localhost:4000/login')
-      handleDiscordAuthentication(response?.data)
+      const response = await login(email, password)
+      console.log('response', response)
+
+      router.push('/app/dashboard')
     } catch (err) {
-      console.error('Error getting discord access token')
       toast({
-        description: "Error authenticating with Discord",
-        status: "error",
+        description: err?.response?.data?.errors || 'An unexpected error occurred.',
+        status: 'error',
         duration: TOAST_DEFAULT_DURATION,
-        isClosable: true,
+        isClosable: true
       })
     } finally {
       setIsAuthenticating(false)
     }
-  }, [])
-
-  useEffect(() => {
-    getDiscordOauthUrl()
-  }, [])
-
-  useEffect(() => {
-    if (router?.query?.code) {
-      getDiscordAccessToken(router?.query?.code as string)
-    }
-  }, [router?.query?.code])
+  }
 
   return (
     <Box h="100vh" w="100%" display="flex" alignItems="center" justifyContent="center" backgroundColor="gray.800">
-      <Box display="flex" flexDirection="column" >
-        {
-          discordOauthUrl ? (
-            <LinkBox>
-              <LinkOverlay href={discordOauthUrl}>
-                <Button type="button" colorScheme="pink" isLoading={isAuthenticating}>Login with discord</Button>
-              </LinkOverlay>
-            </LinkBox>
-          ) : null
-        }
+      <Box as="form" display="flex" flexDirection="column" w={"100%"} maxWidth={"400px"} px="1rem" onSubmit={handleLoginSubmit}>
+        <Box mb={"1rem"}>
+          <Input label={"Email"} placeholder={"email"} type={"email"} id={"email"} value={email} onChange={(event) => setEmail(event?.target?.value)} />
+        </Box>
+
+        <Box mb={"1rem"}>
+          <Input label={"Password"} placeholder={"password"} type={"password"} id={"password"} value={password} onChange={(event) => setPassword(event?.target?.value)} />
+        </Box>
+
+        <Button mt={"1.5rem"} type="submit" colorScheme="pink" isLoading={isAuthenticating}>Login</Button>
       </Box>
     </Box>
   )

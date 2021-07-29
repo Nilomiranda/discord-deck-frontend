@@ -9,7 +9,8 @@ export const discordClient = axios.create({
 })
 
 export const httpClient = axios.create({
-  baseURL: process.env.API_URL
+  baseURL: process.env.API_URL,
+  withCredentials: true,
 })
 
 const getQueryParams = (params: Record<string, string | number | boolean> | null) => {
@@ -37,7 +38,7 @@ const defaultQueryFunction = async ({ queryKey }) => {
   console.log('discordAccessToken', discordAccessToken)
 
   try {
-    const { data } = await discordClient.get(`${baseEndpoint}${queryParams || ''}`, {
+    const { data } = await httpClient.get(`${baseEndpoint}${queryParams || ''}`, {
       headers: {
         Authorization: discordAccessToken ? `Bearer ${discordAccessToken}` : ''
       }

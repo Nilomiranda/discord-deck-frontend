@@ -9,15 +9,7 @@ interface GuildChannelsListProps {
 }
 
 const GuildChannelsList = ({ guildId }: GuildChannelsListProps) => {
-  const channelsData = useQuery(`guilds/${guildId}/channels`, { enabled: !!guildId })
-
   const [channels, setChannels] = useState<GuildChannel[]>([])
-
-  useEffect(() => {
-    if (channelsData?.data) {
-      setChannels(channelsData?.data)
-    }
-  }, [channelsData])
 
   if (!guildId) {
     return null

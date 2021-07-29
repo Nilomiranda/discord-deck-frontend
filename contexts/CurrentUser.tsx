@@ -1,6 +1,5 @@
-import { createContext } from 'react'
+import {createContext, useEffect} from 'react'
 import { useQuery } from 'react-query'
-import cookies from 'js-cookie'
 import { User } from '../interfaces/user'
 
 interface UserContextTypes {
@@ -12,9 +11,9 @@ export const UserContext = createContext<UserContextTypes>({
 })
 
 const UserProvider = ({ children }) => {
-  const { data: userData } = useQuery<User>('users/@me', { enabled: !!cookies.get('DISCORD_ACCESS_TOKEN') })
+  const { data: userData } = useQuery<{ user: User }>('users/me')
 
-  return <UserContext.Provider value={{ user: userData }}>{children}</UserContext.Provider>
+  return <UserContext.Provider value={{ user: userData?.user }}>{children}</UserContext.Provider>
 }
 
 export default UserProvider

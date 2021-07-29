@@ -1,4 +1,4 @@
-import {Box, Heading} from "@chakra-ui/react";
+import {Heading} from "@chakra-ui/react";
 
 const DashboardPage = () => {
   return (
