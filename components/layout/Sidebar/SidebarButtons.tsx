@@ -3,11 +3,10 @@ import {useQuery} from "react-query";
 import {useEffect, useState} from "react";
 import { IoArrowBackOutline } from 'react-icons/io5'
 import {DiscordGuild} from "../../../interfaces/discordGuild";
-import ServerButton from "../../ServerButton";
 import GuildChannelsList from "../GuildChannelsList";
+import GuildsList from "../../GuildsList";
 
 const SidebarButtons = () => {
-  const [guilds, setGuilds] = useState<DiscordGuild[]>([])
   const [isViewingChannels, setIsViewingChannels] = useState(false)
   const [currentViewingGuild, setCurrentViewingGuild] = useState<DiscordGuild>(null)
 
@@ -20,9 +19,7 @@ const SidebarButtons = () => {
     <>
       { !isViewingChannels ?
         (
-          <VStack mt="3rem" spacing="1.5rem" maxHeight={"79vh"} overflowY={"scroll"}>
-            { guilds?.map(guild => <ServerButton guild={guild} onGuildClick={handleGuildClick} />) }
-          </VStack>
+          <GuildsList handleGuildClick={handleGuildClick} />
         ) : (
           <SlideFade in={isViewingChannels} offset={"1.5rem"}>
             <Button leftIcon={<IoArrowBackOutline/>} pl={"0.75rem"} size={"md"} variant="link" colorScheme="pink" onClick={() => setIsViewingChannels(false)}>Servers</Button>

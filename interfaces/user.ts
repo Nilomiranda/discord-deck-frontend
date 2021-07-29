@@ -1,4 +1,12 @@
 export interface User {
+  guildName: string;
+  guildID: string;
+  password: string;
+  email: string;
+  subscriptionID: string
+}
+
+export interface DiscordUser {
   id: string
   username: string
   avatar: string

@@ -10,7 +10,7 @@ import {logout} from "../../../services/auth";
 const SidebarUser = () => {
   const toast = useToast()
   const router = useRouter()
-  const { user } = useContext(UserContext)
+  const { user, discordUser } = useContext(UserContext)
 
   const handleLogOut = async () => {
     try {
@@ -43,10 +43,10 @@ const SidebarUser = () => {
   return (
     <Box padding={"1rem"} display={"flex"} flexDirection={"column"} alignItems={"flex-start"}>
       <Box display={"flex"} alignItems={"flex-start"}>
-        <Avatar name={user?.username} src={`${DISCORD_USER_AVATAR_CDN_BASE_URL}/${user?.id}/${user?.avatar}.png`}  />
+        <Avatar name={discordUser?.username} src={`${DISCORD_USER_AVATAR_CDN_BASE_URL}/${discordUser?.id}/${discordUser?.avatar}.png`}  />
 
         <Box display={"flex"} flexDirection={"column"} alignItems={"flex-start"} ml={"1rem"}>
-          <Text color={"white"} fontSize={"xl"}>{user?.username}</Text>
+          <Text color={"white"} fontSize={"xl"}>{discordUser?.username} <Text as={"span"} fontSize={"sm"} color={"gray.600"}>({user?.guildName})</Text></Text>
           <Text color={"white"}>{user?.email}</Text>
         </Box>
       </Box>
