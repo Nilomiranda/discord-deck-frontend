@@ -24,11 +24,13 @@
     "react-hook-form": "^7.5.2",
     "react-icons": "^4.2.0",
     "react-query": "^3.16.0",
+    "react-select": "^4.3.1",
     "zustand": "^3.5.7"
   },
   "devDependencies": {
     "@types/js-cookie": "^2.2.7",
     "@types/react": "^17.0.5",
+    "@types/react-select": "^4.0.17",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "eslint": "^7.26.0",
