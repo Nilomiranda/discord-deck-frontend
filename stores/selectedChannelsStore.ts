@@ -9,6 +9,7 @@ interface SelectedChannelState {
   removeChannelFromList: (channel: GuildChannel) => void
   // eslint-disable-next-line no-unused-vars
   addChannelsFromLocalStorage: (channel: GuildChannel[]) => void
+  clearSelectedChannels: () => void
 }
 
 const updateLocalStorage = (channelId: string, action: 'ADD' | 'REMOVE') => {
@@ -64,6 +65,10 @@ export const useSelectedChannelsStore = create<SelectedChannelState>((set) => ({
     }),
   addChannelsFromLocalStorage: (channels: GuildChannel[]) =>
     set(() => ({
-        channels: [...channels],
+      channels: [...channels],
+    })),
+  clearSelectedChannels: () =>
+    set(() => ({
+        channels: [],
       })),
 }))

@@ -6,8 +6,10 @@ import { UserContext } from '../../../contexts/CurrentUser'
 import { TOAST_DEFAULT_DURATION } from '../../../config/constants'
 import { logout } from '../../../services/auth'
 import { getUserAvatar } from '../../../interfaces/user'
+import { useSelectedChannelsStore } from '../../../stores/selectedChannelsStore'
 
 const SidebarUser = () => {
+  const clearSelectedChannels = useSelectedChannelsStore((state) => state?.clearSelectedChannels)
   const toast = useToast()
   const router = useRouter()
   const { user, discordUser } = useContext(UserContext)
@@ -16,6 +18,7 @@ const SidebarUser = () => {
     try {
       await logout()
       window?.localStorage?.clear()
+      clearSelectedChannels()
       toast({
         status: 'success',
         isClosable: true,
