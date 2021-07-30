@@ -5,8 +5,10 @@ import { GuildChannel } from '../../interfaces/guildChannel'
 import ChannelButton from '../ChannelButton'
 import SearchInput from '../form/SearchInput'
 import { UserContext } from '../../contexts/CurrentUser'
+import {useSelectedChannelsStore} from "../../stores/selectedChannelsStore";
 
 const GuildChannelsList = () => {
+  const addChannelToList = useSelectedChannelsStore(state => state?.addChannelToList)
   const { user } = useContext(UserContext)
   const { data: channelsData } = useQuery<{ channels: GuildChannel[] }>(`discord/channels?guildId=${user?.guildID}`, { enabled: !!user?.guildID })
   const [channelsOriginalList, setChannelsOriginalLit] = useState<GuildChannel[]>([])
@@ -14,6 +16,14 @@ const GuildChannelsList = () => {
 
   const handleChannelsSearch = (searchParams: string) => {
     setChannels(channelsOriginalList?.filter((channel) => channel.name?.includes(searchParams)))
+  }
+
+  const handleChannelClicked = (clickedChannel: GuildChannel) => {
+    if (!clickedChannel) {
+      return
+    }
+
+    addChannelToList(clickedChannel)
   }
 
   useEffect(() => {
@@ -30,7 +40,7 @@ const GuildChannelsList = () => {
       {channels
         ?.filter((channel) => channel?.type === 0)
         ?.map((channel) => (
-          <ChannelButton channel={channel} key={channel?.id} />
+          <ChannelButton channel={channel} key={channel?.id} onChannelClick={handleChannelClicked} />
         ))}
     </VStack>
   )

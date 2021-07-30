@@ -35,8 +35,6 @@ const defaultQueryFunction = async ({ queryKey }) => {
 
   const queryParams: string = getQueryParams(typeof queryKey === 'object' ? queryKey[1] : null)
 
-  console.log('discordAccessToken', discordAccessToken)
-
   try {
     const { data } = await httpClient.get(`${baseEndpoint}${queryParams || ''}`, {
       headers: {
