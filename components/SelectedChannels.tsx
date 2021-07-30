@@ -18,9 +18,6 @@ const SelectedChannels = () => {
 
     if (previouslySelectedChannelsIds?.length) {
       const previouslySelectedChannels: GuildChannel[] = previouslySelectedChannelsIds?.map((channelId) => channels?.find((channel) => channel?.id === channelId))
-
-      console.log('previouslySelectedChannels', previouslySelectedChannels)
-
       addChannelsFromLocalStorage(previouslySelectedChannels)
     }
   }
