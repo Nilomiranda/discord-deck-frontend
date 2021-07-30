@@ -17,11 +17,7 @@ const SelectedChannels = () => {
     const previouslySelectedChannelsIds = JSON.parse(window?.localStorage?.getItem('SAVED_SELECTED_CHANNELS') || '[]')
 
     if (previouslySelectedChannelsIds?.length) {
-      const previouslySelectedChannels: GuildChannel[] = previouslySelectedChannelsIds?.map((channelId) => {
-        const previouslySelectedChannel = channels?.find((channel) => channel?.id === channelId)
-
-        return previouslySelectedChannel
-      })
+      const previouslySelectedChannels: GuildChannel[] = previouslySelectedChannelsIds?.map((channelId) => channels?.find((channel) => channel?.id === channelId))
 
       console.log('previouslySelectedChannels', previouslySelectedChannels)
 
