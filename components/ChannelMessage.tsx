@@ -5,15 +5,17 @@ import {format, parseISO} from "date-fns";
 
 interface ChannelMessageProps {
   message: ChannelMessageType
+  // eslint-disable-next-line no-unused-vars
+  onMessageClick?: (message: ChannelMessageType) => void
 }
 
-const ChannelMessage = ({ message }: ChannelMessageProps) => {
+const ChannelMessage = ({ message, onMessageClick = () => null }: ChannelMessageProps) => {
   if (!message) {
     return
   }
 
   return (
-    <Box display={"flex"} flexDirection={"column"} alignItems={"flex-start"} justifyContent={"flex-start"} width={"100%"} padding={"1rem"} bg={"gray.800"} borderRadius={"0.75rem "}>
+    <Box as={"button"} display={"flex"} flexDirection={"column"} alignItems={"flex-start"} justifyContent={"flex-start"} width={"100%"} padding={"1rem"} bg={"gray.800"} borderRadius={"0.75rem "} onClick={() => onMessageClick(message)}>
       <Box display={"flex"} alignItems={"flex-start"}>
         <Avatar name={message?.author?.username} src={getUserAvatar(message?.author)} mb={"1rem"} />
         <Box display={"flex"} flexDirection={"column"} alignItems={"flex-start"}>
