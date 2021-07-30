@@ -32,7 +32,7 @@ const GuildChannelsList = () => {
   }, [channelsData])
 
   return (
-    <VStack mt="3rem" spacing="1.5rem" maxHeight="79vh" overflowY="scroll">
+    <VStack mt="3rem" spacing="1.5rem" maxHeight="79vh" overflowY="auto">
       <Box px="1.25rem" w="100%">
         <SearchInput onSearchChange={handleChannelsSearch} placeholder="Search channel" />
       </Box>

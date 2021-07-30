@@ -1,16 +1,22 @@
 import ChannelCard from "./ChannelCard";
-import {HStack} from "@chakra-ui/react";
+import {Box, Text} from "@chakra-ui/react";
 import {useSelectedChannelsStore} from "../stores/selectedChannelsStore";
 
 const SelectedChannels = () => {
   const selectedChannels = useSelectedChannelsStore(state => state.channels)
 
   return (
-    <HStack spacing={"1.25rem"} h={"100%"} w={"100%"} overflowX={"scroll"}>
+    <Box display={"flex"} alignItems={"stretch"} justifyContent={"flex-start"} h={"100%"} width={"100%"} overflowX={"auto"}>
       { selectedChannels?.length ?
-        selectedChannels?.map(selectedChannel => <ChannelCard channel={selectedChannel} key={selectedChannel.id} />) : null
+        selectedChannels?.map(selectedChannel => (
+          <Box mr={"1rem"}>
+            <ChannelCard channel={selectedChannel} key={selectedChannel.id} />
+          </Box>
+        )) : (
+          <Text color={"white"}>No channels selected. Select one in the left sidebar.</Text>
+        )
       }
-    </HStack>
+    </Box>
   )
 }
 

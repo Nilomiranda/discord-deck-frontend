@@ -6,7 +6,7 @@ const DashboardPage = () => {
       <Box h={"88vh"}>
         <Heading color={"white"}>Dashboard</Heading>
 
-        <Box mt={"3rem"} h={"100%"}>
+        <Box mt={"3rem"} h={"100%"} w={"100%"}>
           <SelectedChannels />
         </Box>
       </Box>

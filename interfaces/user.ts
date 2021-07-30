@@ -1,3 +1,5 @@
+import {DISCORD_USER_AVATAR_CDN_BASE_URL} from "../config/constants";
+
 export interface User {
   guildName: string;
   guildID: string;
@@ -22,4 +24,8 @@ export interface DiscordUser {
   mfa_enabled: boolean
   email: string
   verified: boolean
+}
+
+export const getUserAvatar = (discordUser: DiscordUser): string => {
+  return `${DISCORD_USER_AVATAR_CDN_BASE_URL}/${discordUser?.id}/${discordUser?.avatar}.png`
 }

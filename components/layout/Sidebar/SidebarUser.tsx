@@ -1,11 +1,11 @@
 import {useContext} from "react";
 import {Avatar, Box, Button, Text, Spinner, useToast} from "@chakra-ui/react";
 import { IoLogOutOutline } from 'react-icons/io5'
-import cookies from 'js-cookie'
 import {useRouter} from "next/router";
 import {UserContext} from "../../../contexts/CurrentUser";
 import {DISCORD_USER_AVATAR_CDN_BASE_URL, TOAST_DEFAULT_DURATION} from "../../../config/constants";
 import {logout} from "../../../services/auth";
+import {getUserAvatar} from "../../../interfaces/user";
 
 const SidebarUser = () => {
   const toast = useToast()
@@ -43,7 +43,7 @@ const SidebarUser = () => {
   return (
     <Box padding={"1rem"} display={"flex"} flexDirection={"column"} alignItems={"flex-start"}>
       <Box display={"flex"} alignItems={"flex-start"}>
-        <Avatar name={discordUser?.username} src={`${DISCORD_USER_AVATAR_CDN_BASE_URL}/${discordUser?.id}/${discordUser?.avatar}.png`}  />
+        <Avatar name={discordUser?.username} src={getUserAvatar(discordUser)}  />
 
         <Box display={"flex"} flexDirection={"column"} alignItems={"flex-start"} ml={"1rem"}>
           <Text color={"white"} fontSize={"xl"}>{discordUser?.username} <Text as={"span"} fontSize={"sm"} color={"gray.600"}>({user?.guildName})</Text></Text>

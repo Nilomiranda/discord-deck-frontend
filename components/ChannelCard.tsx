@@ -1,5 +1,5 @@
 import {GuildChannel} from "../interfaces/guildChannel";
-import {Box, Heading, Text, VStack, CloseButton} from "@chakra-ui/react";
+import {Box, Heading, VStack, CloseButton} from "@chakra-ui/react";
 import {useQuery, useQueryClient} from "react-query";
 import {ChannelMessage as ChannelMessageType} from "../interfaces/channelMessage";
 import {useSelectedChannelsStore} from "../stores/selectedChannelsStore";
@@ -38,14 +38,14 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
   }
 
   return (
-    <Box h={"100%"} width={"400px"} overflowY={"scroll"} overflowX={"hidden"} position={"relative"}>
-      <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} position={"fixed"} w={"400px"} bg={"gray.900"} py={"0.5rem"}>
+    <Box h={"100%"} width={"400px"} overflowX={"hidden"} overflowY={"hidden"}>
+      <Box display={"flex"} alignItems={"center"} justifyContent={"space-between"} w={"400px"} bg={"gray.900"} py={"0.5rem"}>
         <Heading fontSize={"lg"} color={"gray.600"}>{channel.name}</Heading>
-        <CloseButton color={"red" } onClick={() => removeChannelFromList(channel)} />
+        <CloseButton color={"red"} onClick={() => removeChannelFromList(channel)} />
       </Box>
 
-      <VStack spacing={"1rem"} mt={"5rem"}>
-        { messages?.map(message => <ChannelMessage message={message} />) }
+      <VStack spacing={"1rem"} overflowY={"auto"} h={"100%"} pr={"0.75rem"} pb={"3.5rem"}>
+        { messages?.filter(message => message?.content?.length)?.map(message => <ChannelMessage key={message?.id} message={message} />) }
       </VStack>
     </Box>
   )
