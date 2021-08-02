@@ -7,7 +7,19 @@ export interface ChannelMessage {
   channel_id: string
   author: DiscordUser
   attachments: any[]
-  embeds: any[]
+  embeds: {
+    type: string
+    title: string
+    description: string
+    color: number
+    url?: string
+    fields:
+      {
+        name: string
+        value: string
+        inline: boolean
+      }[]
+  }[]
   mentions:
     {
       id: string
