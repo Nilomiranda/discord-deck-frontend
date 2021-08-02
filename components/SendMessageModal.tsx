@@ -8,6 +8,7 @@ import { GuildRole } from '../interfaces/guildRole'
 import { UserContext } from '../contexts/CurrentUser'
 import { sendMessage } from '../services/discord'
 import { TOAST_DEFAULT_DURATION } from '../config/constants'
+import { GuildMember } from '../interfaces/guildMember'
 
 interface SendMessageModalProps {
   isOpen: boolean
@@ -18,22 +19,26 @@ interface SendMessageModalProps {
 const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModalProps) => {
   const { user } = useContext(UserContext)
   const { data: rolesData } = useQuery<{ roles: GuildRole[] }>(`discord/guilds/roles?guildId=${user?.guildID}`, { enabled: !!user?.guildID })
+  const { data: membersData } = useQuery<{ members: GuildMember[] }>(`discord/guilds/members?guildId=${user?.guildID}`, { enabled: !!user?.guildID })
   const toast = useToast()
 
   const [message, setMessage] = useState('')
   const [selectedRoles, setSelectedRoles] = useState<{ label: string; value: string }[]>([])
+  const [selectedMembers, setSelectedMembers] = useState<{ label: string; value: string }[]>([])
   const [sendAsReply, setSendAsReply] = useState<boolean>(false)
 
   const clearForm = () => {
     setSelectedRoles([])
     setSendAsReply(false)
     setMessage('')
+    setSelectedMembers([])
   }
 
   const handleSendMessage = async () => {
     const mappedRolesToMentionString = selectedRoles?.length ? selectedRoles?.map((selectedRole) => `<@&${selectedRole?.value}>`)?.join(' ') : ''
+    const mappedMembersToMentionString = selectedMembers?.length ? selectedMembers?.map((selectedMember) => `<@!${selectedMember?.value}>`)?.join(' ') : ''
 
-    const content = `${message || ''} ${mappedRolesToMentionString}`
+    const content = `${message || ''} ${mappedRolesToMentionString} ${mappedMembersToMentionString}`
 
     try {
       await sendMessage(selectedMessage?.channel_id, content, sendAsReply ? selectedMessage?.id : null)
@@ -68,6 +73,10 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
     setSelectedRoles([...values])
   }
 
+  const handleMembersMentionListChanged = (values: { label: string; value: string }[]) => {
+    setSelectedMembers([...values])
+  }
+
   return (
     <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
       <ModalOverlay />
@@ -82,12 +91,26 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
             Role mentions
           </Text>
           <Select
+            value={selectedRoles}
             isMulti
             name="mentions"
             options={rolesData?.roles?.length ? rolesData?.roles?.map((role) => ({ label: role?.name, value: role?.id })) : []}
             className="basic-multi-select"
             classNamePrefix="friday-deck-select"
             onChange={handleMentionListChanged}
+          />
+
+          <Text color="white" fontSize="sm" mb="0.75rem" mt="1.25rem">
+            Member mentions
+          </Text>
+          <Select
+            value={selectedMembers}
+            isMulti
+            name="mentions"
+            options={membersData?.members?.length ? membersData?.members?.map((member: GuildMember) => ({ label: member?.nick || member?.user?.username, value: member?.user?.id })) : []}
+            className="basic-multi-select"
+            classNamePrefix="friday-deck-select"
+            onChange={handleMembersMentionListChanged}
           />
 
           <Textarea
