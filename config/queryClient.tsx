@@ -3,11 +3,6 @@ import { QueryClient } from 'react-query'
 import Router from 'next/router'
 import cookies from 'js-cookie'
 
-export const discordClient = axios.create({
-  baseURL: process.env.DISCORD_API_URL,
-  withCredentials: true,
-})
-
 export const httpClient = axios.create({
   baseURL: process.env.API_URL,
   withCredentials: true,
@@ -38,8 +33,8 @@ const defaultQueryFunction = async ({ queryKey }) => {
   try {
     const { data } = await httpClient.get(`${baseEndpoint}${queryParams || ''}`, {
       headers: {
-        Authorization: discordAccessToken ? `Bearer ${discordAccessToken}` : ''
-      }
+        Authorization: discordAccessToken ? `Bearer ${discordAccessToken}` : '',
+      },
     })
     return data
   } catch (err) {
