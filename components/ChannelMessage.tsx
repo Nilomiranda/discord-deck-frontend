@@ -8,9 +8,10 @@ interface ChannelMessageProps {
   message: ChannelMessageType
   // eslint-disable-next-line no-unused-vars
   onMessageClick?: (message: ChannelMessageType) => void
+  scrollable?: boolean
 }
 
-const ChannelMessage = ({ message, onMessageClick = () => null }: ChannelMessageProps) => {
+const ChannelMessage = ({ message, onMessageClick = () => null, scrollable = false }: ChannelMessageProps) => {
   if (!message) {
     return
   }
@@ -28,7 +29,7 @@ const ChannelMessage = ({ message, onMessageClick = () => null }: ChannelMessage
           </Box>
         </Box>
 
-        <Box background={"#212938"} p={"0.5rem"} borderTopRightRadius={"0.5rem"} borderBottomRightRadius={"0.5rem"} borderLeftWidth={"3px"} borderLeftColor={discordColorMap[embededMessage?.color]}>
+        <Box background={"#212938"} p={"0.5rem"} borderTopRightRadius={"0.5rem"} borderBottomRightRadius={"0.5rem"} borderLeftWidth={"3px"} borderLeftColor={discordColorMap[embededMessage?.color]} maxHeight={scrollable ? "200px" : "unset"} overflowY={"auto"}>
           <Text color={"white"} fontWeight={"bold"} w={"100%"} textAlign={"left"} fontSize={"lg"}>{embededMessage?.title}</Text>
           <Text color={"white"} fontWeight={"light"} w={"100%"} textAlign={"left"} fontSize={"sm"}>{embededMessage?.description}</Text>
           <Link color={"blue.400"} w={"100%"} textAlign={"left"} display={"block"} fontSize={"sm"} href={embededMessage?.url} target={"_blank"} rel={"noopener"} mt={"0.5rem"}>{embededMessage?.url}</Link>

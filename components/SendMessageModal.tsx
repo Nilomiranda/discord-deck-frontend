@@ -84,7 +84,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
         <ModalCloseButton color="gray.600" />
         <ModalBody mt="3rem">
           <Box mb="1.5rem">
-            <ChannelMessage message={selectedMessage} />
+            <ChannelMessage message={selectedMessage} scrollable />
           </Box>
 
           <Text color="white" fontSize="sm" mb="0.75rem">
