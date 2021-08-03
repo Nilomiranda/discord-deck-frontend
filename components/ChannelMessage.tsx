@@ -55,7 +55,7 @@ const ChannelMessage = ({ message, onMessageClick = () => null, scrollable = fal
           <Text color={"gray.500"} textAlign={"left"} fontSize={"xs"} ml={"1rem"}>{format(parseISO(message?.timestamp), 'PPpp')}</Text>
         </Box>
       </Box>
-      <Text color={"white"} w={"100%"} textAlign={"left"} fontSize={"sm"}>{message?.content}</Text>
+      <Text color={"white"} w={"100%"} textAlign={"left"} fontSize={"sm"} maxHeight={scrollable ? "200px" : "unset"} overflowY={"auto"}>{message?.content}</Text>
     </Box>
   )
 }
