@@ -74,7 +74,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
     const content = `${message || ''} ${mappedRolesToMentionString} ${mappedMembersToMentionString}`
 
     try {
-      await sendMessage(selectedChannels?.map(selectedChannel => selectedChannel?.value), content, sendAsReply ? selectedMessage?.id : null)
+      await sendMessage(selectedChannels?.map(selectedChannel => selectedChannel?.value), content, selectedMessage?.channel_id, user?.guildID, sendAsReply ? selectedMessage?.id : null)
 
       clearForm()
 
