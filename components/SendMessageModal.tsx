@@ -181,7 +181,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
           <Text color="white" fontSize="sm" mb="0.75rem" mt={"2rem"}>
             Channels to send to:
           </Text>
-          <Text color="gray.600" fontSize="xs" mb="0.75rem">
+          <Text color="gray.400" fontSize="xs" mb="0.75rem">
             By default, the message's channel will receive the message, unless you remove from the list.
           </Text>
           <Select
