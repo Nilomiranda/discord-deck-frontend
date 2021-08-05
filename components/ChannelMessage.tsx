@@ -34,8 +34,8 @@ const ChannelMessage = ({ message, onMessageClick = () => null, scrollable = fal
           <Text color={"white"} fontWeight={"light"} w={"100%"} textAlign={"left"} fontSize={"sm"}>{embededMessage?.description}</Text>
           <Link color={"blue.400"} w={"100%"} textAlign={"left"} display={"block"} fontSize={"sm"} href={embededMessage?.url} target={"_blank"} rel={"noopener"} mt={"0.5rem"}>{embededMessage?.url}</Link>
 
-          { embededMessage?.fields?.length ? embededMessage?.fields?.map(embededMessageField => (
-            <Box mt={"1rem"}>
+          { embededMessage?.fields?.length ? embededMessage?.fields?.map((embededMessageField, index) => (
+            <Box mt={"1rem"} key={index}>
               <Text w={"100%"} fontWeight={"bold"} textAlign={"left"} color={"white"}>{embededMessageField?.name}</Text>
               <Text w={"100%"} fontWeight={"light"} textAlign={"left"} color={"white"}>{embededMessageField?.value}</Text>
             </Box>

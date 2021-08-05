@@ -32,7 +32,7 @@ const SelectedChannels = () => {
     <Box display="flex" alignItems="stretch" justifyContent="flex-start" h="100%" width="100%" overflowX="auto">
       {selectedChannels?.length ? (
         selectedChannels?.map((selectedChannel) => (
-          <Box mr="1rem">
+          <Box mr="1rem" key={selectedChannel?.id}>
             <ChannelCard channel={selectedChannel} key={selectedChannel.id} />
           </Box>
         ))
