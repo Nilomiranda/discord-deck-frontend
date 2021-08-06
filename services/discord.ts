@@ -7,7 +7,7 @@ export const sendMessage = async (channelsIds: string[], content: string, ownerC
     return
   }
 
-  const mappedPayload = channelsIds?.map(channelId => {
+  const mappedPayload = channelsIds?.map((channelId) => {
     const formattedPayload = { channelId }
 
     if (channelId === ownerChannelId && replyingToMessageId) {
@@ -16,6 +16,8 @@ export const sendMessage = async (channelsIds: string[], content: string, ownerC
     } else if (channelId !== ownerChannelId && replyingToMessageId) {
       // attach message link to message content since you can only send a reply in the same channel as the message being replied
       Object.assign(formattedPayload, { content: `${content} ${DISCORD_MESSAGE_LINK_BASE_URL}/${guildId}/${ownerChannelId}/${replyingToMessageId}` })
+    } else {
+      Object.assign(formattedPayload, { content })
     }
 
     return formattedPayload
