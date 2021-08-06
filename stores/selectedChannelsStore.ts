@@ -6,7 +6,7 @@ interface SelectedChannelState {
   // eslint-disable-next-line no-unused-vars
   addChannelToList: (channel: GuildChannel) => void
   // eslint-disable-next-line no-unused-vars
-  removeChannelFromList: (channel: GuildChannel) => void
+  removeChannelFromList: (channelId: string) => void
   // eslint-disable-next-line no-unused-vars
   addChannelsFromLocalStorage: (channel: GuildChannel[]) => void
   clearSelectedChannels: () => void
@@ -38,21 +38,15 @@ export const useSelectedChannelsStore = create<SelectedChannelState>((set) => ({
         const channelId = channel?.id
         updateLocalStorage(channelId, 'ADD')
 
-        return { channels: (state as any)?.channels?.concat(channel) }
+        return { channels: state?.channels?.concat(channel) }
       }
     }),
-  removeChannelFromList: (channel: GuildChannel) =>
+  removeChannelFromList: (channelId: string) =>
     set((state) => {
-      console.log('channel', channel)
-
-      const newChannelsList = state?.channels?.filter((selectedChannel) => selectedChannel?.id !== channel?.id)
-
-      updateLocalStorage(channel?.id, 'REMOVE')
-
-      console.log('newChannelsList', newChannelsList)
+      updateLocalStorage(channelId, 'REMOVE')
 
       return {
-        channels: newChannelsList,
+        channels: state?.channels?.filter((selectedChannel) => selectedChannel?.id !== channelId),
       }
     }),
   addChannelsFromLocalStorage: (channels: GuildChannel[]) =>

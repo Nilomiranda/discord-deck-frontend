@@ -28,6 +28,10 @@ const SelectedChannels = () => {
     }
   }, [channelsData])
 
+  useEffect(() => {
+    console.log('selectedChannels changed', selectedChannels)
+  }, [selectedChannels])
+
   return (
     <Box display="flex" alignItems="stretch" justifyContent="flex-start" h="100%" width="100%" overflowX="auto">
       {selectedChannels?.length ? (

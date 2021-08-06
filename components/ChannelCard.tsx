@@ -57,7 +57,7 @@ const ChannelCard = ({ channel }: ChannelCardProps) => {
           <Heading fontSize="lg" color="gray.600">
             {channel.name}
           </Heading>
-          <CloseButton color="red" onClick={() => removeChannelFromList(channel)} />
+          <CloseButton color="red" onClick={() => removeChannelFromList(channel?.id)} />
         </Box>
 
         <VStack spacing="1rem" overflowY="auto" h="100%" pr="0.75rem" pb="3.5rem">
