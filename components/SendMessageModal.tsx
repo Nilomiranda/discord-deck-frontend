@@ -29,6 +29,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
   const [selectedMembers, setSelectedMembers] = useState<{ label: string; value: string }[]>([])
   const [selectedChannels, setSelectedChannels] = useState<{ label: string; value: string }[]>([])
   const [sendAsReply, setSendAsReply] = useState<boolean>(false)
+  const [sendingMessage, setSendingMessage] = useState(false)
 
   const validateForm = (): boolean => {
     if (!selectedRoles?.length && !selectedMembers?.length && !message) {
@@ -74,6 +75,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
     const content = `${message || ''} ${mappedRolesToMentionString} ${mappedMembersToMentionString}`
 
     try {
+      setSendingMessage(true)
       await sendMessage(selectedChannels?.map(selectedChannel => selectedChannel?.value), content, selectedMessage?.channel_id, user?.guildID, sendAsReply ? selectedMessage?.id : null)
 
       clearForm()
@@ -92,6 +94,8 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
         duration: TOAST_DEFAULT_DURATION,
         isClosable: true,
       })
+    } finally {
+      setSendingMessage(false)
     }
   }
 
@@ -187,7 +191,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
           <Select
             value={selectedChannels}
             isMulti
-            options={channelsData?.channels?.length ? channelsData?.channels?.map((channel) => ({ label: channel?.name, value: channel?.id })) : []}
+            options={channelsData?.channels?.length ? channelsData?.channels?.filter((channel) => channel?.type === 0)?.map((channel) => ({ label: channel?.name, value: channel?.id })) : []}
             className="basic-multi-select"
             classNamePrefix="friday-deck-select"
             onChange={handleChannelsListChanged}
@@ -197,7 +201,7 @@ const SendMessageModal = ({ isOpen, onClose, selectedMessage }: SendMessageModal
           <Button colorScheme="pink" variant="outline" mr={3} onClick={onClose}>
             Close
           </Button>
-          <Button colorScheme="pink" onClick={handleSendMessage}>
+          <Button colorScheme="pink" onClick={handleSendMessage} isLoading={sendingMessage}>
             Send message
           </Button>
         </ModalFooter>
