@@ -23,13 +23,7 @@ const updateLocalStorage = (channelId: string, action: 'ADD' | 'REMOVE') => {
   if (action === 'ADD') {
     updatedSavedChannelsIds = savedChannelsIds?.concat(channelId)
   } else {
-    const selectedChannelIdToRemoveIndex = savedChannelsIds?.indexOf(channelId)
-
-    if (selectedChannelIdToRemoveIndex > -1) {
-      const safeCopy = [...savedChannelsIds]
-      safeCopy?.splice(selectedChannelIdToRemoveIndex, 1)
-      updatedSavedChannelsIds = [...safeCopy]
-    }
+    updatedSavedChannelsIds = savedChannelsIds?.filter((savedId) => savedId !== channelId)
   }
 
   window?.localStorage?.setItem('SAVED_SELECTED_CHANNELS', JSON.stringify(updatedSavedChannelsIds))
@@ -49,18 +43,16 @@ export const useSelectedChannelsStore = create<SelectedChannelState>((set) => ({
     }),
   removeChannelFromList: (channel: GuildChannel) =>
     set((state) => {
-      const channelToRemoveIndex = state?.channels?.findIndex((currentAddedChannel) => currentAddedChannel?.id === channel?.id)
+      console.log('channel', channel)
 
-      if (channelToRemoveIndex > -1) {
-        const channelsListCopy = [...state?.channels]
-        channelsListCopy?.splice(channelToRemoveIndex, 1)
+      const newChannelsList = state?.channels?.filter((selectedChannel) => selectedChannel?.id !== channel?.id)
 
-        const channelToRemoveId = channel?.id
-        updateLocalStorage(channelToRemoveId, 'REMOVE')
+      updateLocalStorage(channel?.id, 'REMOVE')
 
-        return {
-          channels: [...channelsListCopy],
-        }
+      console.log('newChannelsList', newChannelsList)
+
+      return {
+        channels: newChannelsList,
       }
     }),
   addChannelsFromLocalStorage: (channels: GuildChannel[]) =>
@@ -69,6 +61,6 @@ export const useSelectedChannelsStore = create<SelectedChannelState>((set) => ({
     })),
   clearSelectedChannels: () =>
     set(() => ({
-        channels: [],
-      })),
+      channels: [],
+    })),
 }))
