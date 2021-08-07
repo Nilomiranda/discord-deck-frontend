@@ -27,6 +27,7 @@ const ChannelButton = ({ channel, onChannelClick }: ChannelButtonProps) => {
       display="flex"
       cursor="pointer"
       justifyContent="space-between"
+      alignItems="center"
       _hover={{ background: 'gray.700' }}
       size="lg"
       bg={selectedChannelsIds?.includes(channel?.id) ? 'gray.700' : 'transparent'}
@@ -37,6 +38,7 @@ const ChannelButton = ({ channel, onChannelClick }: ChannelButtonProps) => {
       color="white"
       w="90%"
       onClick={() => onChannelClick(channel)}
+      borderRadius="0.375rem"
     >
       <Text color="white" ml="0.75rem">
         {channel?.name}
