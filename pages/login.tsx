@@ -1,6 +1,6 @@
 import { Box, Button, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { TOAST_DEFAULT_DURATION } from '../config/constants'
 import Input from '../components/form/Input'
 import { login } from '../services/auth'
@@ -32,6 +32,12 @@ const LoginPage = () => {
       setIsAuthenticating(false)
     }
   }
+
+  useEffect(() => {
+    if (router?.query?.email) {
+      setEmail(router?.query?.email as string)
+    }
+  }, [router?.query])
 
   return (
     <Box h="100vh" w="100%" display="flex" alignItems="center" justifyContent="center" backgroundColor="gray.800">
