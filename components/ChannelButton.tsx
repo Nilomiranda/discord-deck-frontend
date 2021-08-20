@@ -1,9 +1,8 @@
-import { Box, CloseButton, Text, IconButton } from '@chakra-ui/react'
+import { Box, CloseButton, Text } from '@chakra-ui/react'
 import { GuildChannel } from '../interfaces/guildChannel'
 import { useSelectedChannelsStore } from '../stores/selectedChannelsStore'
 import type { MouseEvent } from 'react'
-import {IoSettings} from "react-icons/io5";
-import ChannelSettingsMenu from "./ChannelSettingsMenu";
+import ChannelSettingsMenu from './ChannelSettingsMenu'
 
 interface ChannelButtonProps {
   channel: GuildChannel
@@ -46,7 +45,7 @@ const ChannelButton = ({ channel, onChannelClick }: ChannelButtonProps) => {
         {channel?.name}
       </Text>
 
-      <Box marginLeft={"auto"} display={"flex"} alignItems={"center"}>
+      <Box marginLeft="auto" display="flex" alignItems="center">
         <ChannelSettingsMenu channel={channel} />
 
         {selectedChannelsIds?.includes(channel?.id) ? <CloseButton color="red" onClick={(event) => handleChannelRemoval(event)} /> : null}
