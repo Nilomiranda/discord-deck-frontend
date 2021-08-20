@@ -1,19 +1,65 @@
 import {ChannelMessage as ChannelMessageType} from "../interfaces/channelMessage";
-import {Avatar, Box, Link, Text} from "@chakra-ui/react";
+import {
+  Avatar,
+  Box, Button,
+  Link,
+  Text, useToast,
+} from "@chakra-ui/react";
 import {getUserAvatar} from "../interfaces/user";
 import {format, parseISO} from "date-fns";
-import {discordColorMap} from "../config/constants";
+import {discordColorMap, TOAST_DEFAULT_DURATION} from "../config/constants";
+import {GuildChannel} from "../interfaces/guildChannel";
+import {sendMessage} from "../services/discord";
+import {useContext, useState} from "react";
+import {GuildRole} from "../interfaces/guildRole";
+import {UserContext} from "../contexts/CurrentUser";
 
 interface ChannelMessageProps {
   message: ChannelMessageType
+  channel?: GuildChannel
+  pingRolesShortcut?: boolean
+  presetRoles?: GuildRole[];
   // eslint-disable-next-line no-unused-vars
   onMessageClick?: (message: ChannelMessageType) => void
   scrollable?: boolean
 }
 
-const ChannelMessage = ({ message, onMessageClick = () => null, scrollable = false }: ChannelMessageProps) => {
+const ChannelMessage = ({ message, channel, onMessageClick = () => null, scrollable = false, pingRolesShortcut = true, presetRoles = [] }: ChannelMessageProps) => {
+  const toast = useToast()
+  const { user } = useContext(UserContext)
+
+  const [pinging, setPinging] = useState(false)
+
   if (!message) {
     return
+  }
+
+  const handlePingRoles = async (event) => {
+    event?.stopPropagation()
+    const mappedRolesToMentionString = presetRoles?.length ? presetRoles?.map((presetRole) => `<@&${presetRole?.id}>`)?.join(' ') : ''
+
+    const content = `${mappedRolesToMentionString}`
+
+    try {
+      setPinging(true)
+      await sendMessage([channel?.id], content, channel?.id, user?.guildID, message?.id)
+
+      toast({
+        status: 'success',
+        description: `Roles pinged`,
+        duration: TOAST_DEFAULT_DURATION,
+        isClosable: true,
+      })
+    } catch (err) {
+      toast({
+        status: 'error',
+        description: `We couldn't ping these roles at the moment. Please try again later.`,
+        duration: TOAST_DEFAULT_DURATION,
+        isClosable: true,
+      })
+    } finally {
+      setPinging(false)
+    }
   }
 
   if (message?.embeds?.length) {
@@ -42,6 +88,11 @@ const ChannelMessage = ({ message, onMessageClick = () => null, scrollable = fal
           )) : null }
         </Box>
 
+        { pingRolesShortcut ?
+          (<Box display={"flex"} alignItems={"center"} justifyContent={"flex-end"} w={"100%"} mt={"1.5rem"}>
+            <Button size="sm"  variant={"link"} colorScheme={"pink"} onClick={handlePingRoles} isLoading={pinging}>Ping roles</Button>
+          </Box>) : null
+        }
       </Box>
     )
   }
@@ -56,6 +107,12 @@ const ChannelMessage = ({ message, onMessageClick = () => null, scrollable = fal
         </Box>
       </Box>
       <Text color={"white"} w={"100%"} textAlign={"left"} fontSize={"sm"} maxHeight={scrollable ? "200px" : "unset"} overflowY={"auto"}>{message?.content}</Text>
+
+      { pingRolesShortcut ?
+        (<Box display={"flex"} alignItems={"center"} justifyContent={"flex-end"} w={"100%"} mt={"1.5rem"}>
+          <Button size="sm"  variant={"link"} colorScheme={"pink"} onClick={handlePingRoles} isLoading={pinging}>Ping roles</Button>
+        </Box>) : null
+      }
     </Box>
   )
 }
