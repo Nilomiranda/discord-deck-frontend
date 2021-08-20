@@ -1,7 +1,7 @@
 import { IoSettings } from 'react-icons/io5'
-import { IconButton, Menu, MenuButton, MenuList, MenuItem, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, Text, ModalFooter, Button, Modal, useToast } from '@chakra-ui/react'
+import { IconButton, Menu, MenuButton, MenuList, MenuItem, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, Text, ModalFooter, Button, Modal, useToast, Portal } from '@chakra-ui/react'
 import Select from 'react-select'
-import { useQuery } from 'react-query'
+import {useQuery, useQueryClient} from 'react-query'
 import { useContext, useEffect, useState } from 'react'
 import { GuildRole } from '../interfaces/guildRole'
 import { GuildChannel } from '../interfaces/guildChannel'
@@ -18,22 +18,23 @@ const ChannelSettingsMenu = ({ channel }: ChannelSettingsMenuProps) => {
   const { user } = useContext(UserContext)
   const { data: rolesData } = useQuery<{ roles: GuildRole[] }>(`discord/guilds/roles?guildId=${user?.guildID}`, { enabled: !!user?.guildID })
   const { data: rolesPresetData } = useQuery<{ rolesIds: string[] }>(`/users/channels/${channel?.id}/presets`, { enabled: !!channel?.id && !!rolesData?.roles?.length })
+  const queryClient = useQueryClient()
 
   const [selectedRoles, setSelectedRoles] = useState<{ label: string; value: string }[]>([])
   const [saving, setSaving] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const handleMentionListChanged = (values: { label: string; value: string }[]) => {
     setSelectedRoles([...values])
   }
 
   const onClose = () => {
-    setIsOpen(false)
+    setIsModalOpen(false)
   }
 
   const handleOpenPresetRolesSettingsModal = (event) => {
     event?.stopPropagation()
-    setIsOpen(true)
+    setIsModalOpen(true)
   }
 
   const handleSave = async () => {
@@ -49,6 +50,7 @@ const ChannelSettingsMenu = ({ channel }: ChannelSettingsMenuProps) => {
         duration: TOAST_DEFAULT_DURATION,
         isClosable: true,
       })
+      queryClient?.refetchQueries([`/users/channels/${channel?.id}/presets`])
     } catch (err) {
       toast({
         status: 'error',
@@ -82,15 +84,24 @@ const ChannelSettingsMenu = ({ channel }: ChannelSettingsMenuProps) => {
   return (
     <>
       <Menu>
-        <MenuButton as={IconButton} icon={<IoSettings />} variant="link" aria-label="Channel settings" borderColor="gray.700" onClick={(event) => event?.stopPropagation()} />
-        <MenuList background="gray.800">
-          <MenuItem background="gray.800" _focus={{ background: 'gray.700' }} _hover={{ background: 'gray.700' }} onClick={handleOpenPresetRolesSettingsModal}>
-            Preset roles
-          </MenuItem>
-        </MenuList>
+        {({ isOpen }) => (
+          <>
+            <MenuButton as={IconButton} icon={<IoSettings />} variant="link" aria-label="Channel settings" borderColor="gray.700" onClick={(event) => event?.stopPropagation()} />
+            {
+              isOpen ?
+                (
+                  <MenuList background="gray.800">
+                    <MenuItem background="gray.800" _focus={{ background: 'gray.700' }} _hover={{ background: 'gray.700' }} onClick={handleOpenPresetRolesSettingsModal}>
+                      Preset roles
+                    </MenuItem>
+                  </MenuList>
+                ) : null
+            }
+          </>
+        )}
       </Menu>
 
-      <Modal isCentered onClose={onClose} isOpen={isOpen} motionPreset="slideInBottom">
+      <Modal isCentered onClose={onClose} isOpen={isModalOpen} motionPreset="slideInBottom">
         <ModalOverlay />
         <ModalContent background="gray.900">
           <ModalCloseButton color="gray.600" />
