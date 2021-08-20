@@ -2,6 +2,7 @@ import { Box, CloseButton, Text } from '@chakra-ui/react'
 import { GuildChannel } from '../interfaces/guildChannel'
 import { useSelectedChannelsStore } from '../stores/selectedChannelsStore'
 import type { MouseEvent } from 'react'
+import ChannelSettingsMenu from './ChannelSettingsMenu'
 
 interface ChannelButtonProps {
   channel: GuildChannel
@@ -26,7 +27,7 @@ const ChannelButton = ({ channel, onChannelClick }: ChannelButtonProps) => {
     <Box
       display="flex"
       cursor="pointer"
-      justifyContent="space-between"
+      justifyContent="flex-start"
       alignItems="center"
       _hover={{ background: 'gray.700' }}
       size="lg"
@@ -43,7 +44,12 @@ const ChannelButton = ({ channel, onChannelClick }: ChannelButtonProps) => {
       <Text color="white" ml="0.75rem">
         {channel?.name}
       </Text>
-      {selectedChannelsIds?.includes(channel?.id) ? <CloseButton color="red" onClick={(event) => handleChannelRemoval(event)} marginLeft="auto" /> : null}
+
+      <Box marginLeft="auto" display="flex" alignItems="center">
+        <ChannelSettingsMenu channel={channel} />
+
+        {selectedChannelsIds?.includes(channel?.id) ? <CloseButton color="red" onClick={(event) => handleChannelRemoval(event)} /> : null}
+      </Box>
     </Box>
   )
 }
