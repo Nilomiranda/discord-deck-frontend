@@ -1,7 +1,7 @@
-import { IoSettings } from 'react-icons/io5'
-import { IconButton, Menu, MenuButton, MenuList, MenuItem, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, Text, ModalFooter, Button, Modal, useToast, Portal } from '@chakra-ui/react'
+import { IoEllipsisHorizontal } from 'react-icons/io5'
+import { IconButton, Menu, MenuButton, MenuList, MenuItem, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, Text, ModalFooter, Button, Modal, useToast } from '@chakra-ui/react'
 import Select from 'react-select'
-import {useQuery, useQueryClient} from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import { useContext, useEffect, useState } from 'react'
 import { GuildRole } from '../interfaces/guildRole'
 import { GuildChannel } from '../interfaces/guildChannel'
@@ -86,17 +86,14 @@ const ChannelSettingsMenu = ({ channel }: ChannelSettingsMenuProps) => {
       <Menu>
         {({ isOpen }) => (
           <>
-            <MenuButton as={IconButton} icon={<IoSettings />} variant="link" aria-label="Channel settings" borderColor="gray.700" onClick={(event) => event?.stopPropagation()} />
-            {
-              isOpen ?
-                (
-                  <MenuList background="gray.800">
-                    <MenuItem background="gray.800" _focus={{ background: 'gray.700' }} _hover={{ background: 'gray.700' }} onClick={handleOpenPresetRolesSettingsModal}>
-                      Preset roles
-                    </MenuItem>
-                  </MenuList>
-                ) : null
-            }
+            <MenuButton as={IconButton} icon={<IoEllipsisHorizontal />} variant="link" aria-label="Channel settings" borderColor="gray.700" onClick={(event) => event?.stopPropagation()} />
+            {isOpen ? (
+              <MenuList background="gray.800">
+                <MenuItem background="gray.800" _focus={{ background: 'gray.700' }} _hover={{ background: 'gray.700' }} onClick={handleOpenPresetRolesSettingsModal}>
+                  Preset roles
+                </MenuItem>
+              </MenuList>
+            ) : null}
           </>
         )}
       </Menu>
