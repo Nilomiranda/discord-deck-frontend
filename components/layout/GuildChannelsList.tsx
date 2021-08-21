@@ -5,12 +5,12 @@ import { GuildChannel } from '../../interfaces/guildChannel'
 import ChannelButton from '../ChannelButton'
 import SearchInput from '../form/SearchInput'
 import { UserContext } from '../../contexts/CurrentUser'
-import {useSelectedChannelsStore} from "../../stores/selectedChannelsStore";
-import {useHiddenChannelsStore} from "../../stores/visibleChannelsStore";
+import { useSelectedChannelsStore } from '../../stores/selectedChannelsStore'
+import { useHiddenChannelsStore } from '../../stores/visibleChannelsStore'
 
 const GuildChannelsList = () => {
-  const addChannelToList = useSelectedChannelsStore(state => state?.addChannelToList)
-  const hiddenChannelsIds = useHiddenChannelsStore(state => state?.channels)?.map(hiddenChannel => hiddenChannel?.id)
+  const addChannelToList = useSelectedChannelsStore((state) => state?.addChannelToList)
+  const hiddenChannelsIds = useHiddenChannelsStore((state) => state?.channels)?.map((hiddenChannel) => hiddenChannel?.id)
 
   const { user } = useContext(UserContext)
   const { data: channelsData } = useQuery<{ channels: GuildChannel[] }>(`discord/channels?guildId=${user?.guildID}`, { enabled: !!user?.guildID })
@@ -38,7 +38,11 @@ const GuildChannelsList = () => {
     <VStack mt="3rem" spacing="1.5rem" maxHeight="70vh" overflowY="auto">
       <Box px="1.25rem" w="100%">
         <SearchInput onSearchChange={handleChannelsSearch} placeholder="Search channel" />
-        { hiddenChannelsIds?.length ? <Text mt="1rem" color={"white"} fontSize={"xs"} color={"gray.600"}>Some channels are currently hidden</Text> : null }
+        {hiddenChannelsIds?.length ? (
+          <Text mt="1rem" fontSize="xs" color="gray.600">
+            Some channels are currently hidden
+          </Text>
+        ) : null}
       </Box>
 
       {channels
