@@ -1,7 +1,8 @@
 import { useContext } from 'react'
-import { Avatar, Box, Button, Text, Spinner, useToast } from '@chakra-ui/react'
-import { IoLogOutOutline } from 'react-icons/io5'
+import { Avatar, Box, Button, Text, Spinner, useToast, Divider, VStack } from '@chakra-ui/react'
+import { IoLogOutOutline, IoSettings } from 'react-icons/io5'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { UserContext } from '../../../contexts/CurrentUser'
 import { TOAST_DEFAULT_DURATION } from '../../../config/constants'
 import { logout } from '../../../services/auth'
@@ -63,6 +64,16 @@ const SidebarUser = () => {
       <Button size="sm" mt="1.5rem" leftIcon={<IoLogOutOutline />} colorScheme="blackAlpha" onClick={handleLogOut}>
         Log out
       </Button>
+
+      <Divider colorScheme="gray" mt="1rem" />
+
+      <VStack mt="1rem">
+        <Link href="/app/settings">
+          <Button size="sm" _hover={{ background: '#352936' }} colorScheme="pink" variant="ghost" leftIcon={<IoSettings />} color="white">
+            Settings
+          </Button>
+        </Link>
+      </VStack>
     </Box>
   )
 }
